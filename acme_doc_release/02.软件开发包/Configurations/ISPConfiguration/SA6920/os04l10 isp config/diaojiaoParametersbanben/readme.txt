@@ -1,1 +1,0 @@
-../acme_doc_release/02.软件开发包/配置类/ISP配置/SA6920/os04l10_isp_config/调焦参数版本/readme.txt
