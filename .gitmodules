@@ -1,0 +1,3 @@
+[submodule "superacme-src"]
+	path = superacme-src
+	url = http://27.188.56.209:8088/superacme/acme_doc_release.git
