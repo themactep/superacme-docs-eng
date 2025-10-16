@@ -78,6 +78,16 @@ OVERRIDE_TOOLS = {
     "量产测试工具使用指南.pdf": "Mass Production Test Tool User Guide.pdf",
     "音频质量调试工具使用指南.pdf": "Audio Quality Debugging Tool User Guide.pdf",
 }
+# 00.Basic Documentation/Software/bsp overrides
+BSP_CN = ["00.基础文档", "软件相关", "bsp"]
+OVERRIDE_BSP = {
+    "SA62系列 固件烧录与升级使用指南.pdf": "SA62 Series Firmware Flashing and Upgrade User Guide.pdf",
+    "SA62系列 外围设备驱动开发指南_v1.0.pdf": "SA62 Series Peripheral Device Driver Development Guide v1.0.pdf",
+    "SA62系列 开发环境用户指南.pdf": "SA62 Series Development Environment User Guide.pdf",
+    "SA62系列 文件系统使用指南.pdf": "SA62 Series File System Usage Guide.pdf",
+    "SA62系列 镜像打包工具使用指南.pdf": "SA62 Series Image Packaging Tool User Guide.pdf",
+}
+
 
 
 PHRASE_MAP = [
@@ -291,6 +301,11 @@ def main():
             orig_name = parts[-1]
             if orig_name in OVERRIDE_TOOLS:
                 eng_parts = [translate_component(p) for p in parts[:-1]] + [OVERRIDE_TOOLS[orig_name]]
+        # Apply folder-specific overrides for filenames in bsp
+        if len(parts) >= 4 and parts[0:3] == BSP_CN:
+            orig_name = parts[-1]
+            if orig_name in OVERRIDE_BSP:
+                eng_parts = [translate_component(p) for p in parts[:-1]] + [OVERRIDE_BSP[orig_name]]
         eng_rel = os.path.join(args.prefix, *eng_parts)
         eng_path = os.path.join(dest_base, eng_rel)
         parent = os.path.dirname(eng_path)
