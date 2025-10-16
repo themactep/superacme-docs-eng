@@ -64,6 +64,21 @@ OVERRIDE_SDK = {
     "SA62系列音频算法参数调试指南_V0.2.pdf": "SA62 Series Audio Algorithm Parameter Debugging Guide v0.2.pdf",
     "SA62系列 音频设备树配置说明_v0.3.pdf": "SA62 Series Audio Device Tree Configuration Instructions v0.3.pdf",
 }
+# 00.Basic Documentation/Software/tools overrides
+TOOLS_CN = ["00.基础文档", "软件相关", "tools"]
+OVERRIDE_TOOLS = {
+    "SA62系列 AWBTool工具使用指南.pdf": "SA62 Series AWBTool User Guide.pdf",
+    "SA62_系列BSP工具说明v0.2.pdf": "SA62 Series BSP Tool Description v0.2.pdf",
+    "SA62系列_BurnTool工具使用指南.pdf": "SA62 Series BurnTool User Guide.pdf",
+    "SA62系列 streamer_media 离线仿真功能说明v0.4.pdf": "SA62 Series Streamer Media Offline Simulation Function Description v0.4.pdf",
+    "SA62系列 UploadTool工具使用指南.pdf": "SA62 Series UploadTool User Guide.pdf",
+    "SA62系列图像质量调试工具使用指南.pdf": "SA62 Series Image Quality Debugging Tool User Guide.pdf",
+    "相机标定说明.pdf": "Camera Calibration Instructions.pdf",
+    "研极微VNET虚拟网卡标准规范v0.3.pdf": "Yanji Micro VNET Virtual Network Card Standard Specification v0.3.pdf",
+    "量产测试工具使用指南.pdf": "Mass Production Test Tool User Guide.pdf",
+    "音频质量调试工具使用指南.pdf": "Audio Quality Debugging Tool User Guide.pdf",
+}
+
 
 PHRASE_MAP = [
     # Prefer longer/specific phrases first
@@ -271,6 +286,11 @@ def main():
             orig_name = parts[-1]
             if orig_name in OVERRIDE_SDK:
                 eng_parts = [translate_component(p) for p in parts[:-1]] + [OVERRIDE_SDK[orig_name]]
+        # Apply folder-specific overrides for filenames in tools
+        if len(parts) >= 4 and parts[0:3] == TOOLS_CN:
+            orig_name = parts[-1]
+            if orig_name in OVERRIDE_TOOLS:
+                eng_parts = [translate_component(p) for p in parts[:-1]] + [OVERRIDE_TOOLS[orig_name]]
         eng_rel = os.path.join(args.prefix, *eng_parts)
         eng_path = os.path.join(dest_base, eng_rel)
         parent = os.path.dirname(eng_path)
