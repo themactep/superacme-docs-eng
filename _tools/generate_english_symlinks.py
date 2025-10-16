@@ -94,10 +94,22 @@ OVERRIDE_SUBBOARD = {
     "EVB硬件参考设计_原理图_pcb.rar": "EVB Hardware Reference Design PCB Schematic.rar",
     "6920E2 V24 DEMO.tar": "6920E2 V24 DEMO.tar",
     "SA62105E_电源树V1.1.pdf": "SA62105E Power Tree V1.1.pdf",
-
+    "V17_PowerTree.pdf": "SA62105X Power Tree V17.pdf",
 }
 
 
+
+# 00.Basic Documentation/Hardware/Chip overrides
+CHIP_CN = ["00.基础文档", "硬件相关", "芯片"]
+OVERRIDE_CHIP = {
+    "SA62105E_pin_List_ver1.0.8.03.xlsx": "SA62105E_Pin_List_ver1.0.8.03.xlsx",
+    "SA62105X_Pin定义_V1.2.xlsx": "SA62105X_Pin_Definition_V1.2.xlsx",
+    "SA62105X芯片简介v1.2.pdf": "SA62105X Chip Overview v1.2.pdf",
+    "SA62105系列_数据手册V0.32.pdf": "SA62105 Series_Datasheet V0.32.pdf",
+    "研极SA62105E硬件用户指南V0.61.pdf": "Yanji SA62105E Hardware User Guide V0.61.pdf",
+    "研极SA62105X硬件用户指南V0.87.pdf": "Yanji SA62105X Hardware User Guide V0.87.pdf",
+    "研极SA62105芯片适配指南V0.44.pdf": "Yanji SA62105 Chip Adaptation Guide V0.44.pdf",
+}
 
 PHRASE_MAP = [
     # Prefer longer/specific phrases first
@@ -330,6 +342,11 @@ def main():
             orig_name = parts[-1]
             if orig_name in OVERRIDE_SUBBOARD:
                 eng_parts = [translate_component(p) for p in parts[:-1]] + [OVERRIDE_SUBBOARD[orig_name]]
+        # Apply folder-specific overrides for filenames in Hardware/Chip
+        if len(parts) >= 4 and parts[0:3] == CHIP_CN:
+            orig_name = parts[-1]
+            if orig_name in OVERRIDE_CHIP:
+                eng_parts = [translate_component(p) for p in parts[:-1]] + [OVERRIDE_CHIP[orig_name]]
         eng_rel = os.path.join(args.prefix, *eng_parts)
         eng_path = os.path.join(dest_base, eng_rel)
         parent = os.path.dirname(eng_path)
