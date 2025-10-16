@@ -93,7 +93,7 @@ SUBBOARD_CN = ["00.基础文档", "硬件相关", "子板"]
 OVERRIDE_SUBBOARD = {
     "EVB硬件参考设计_原理图_pcb.rar": "EVB Hardware Reference Design PCB Schematic.rar",
     "6920E2 V24 DEMO.tar": "6920E2 V24 DEMO.tar",
-    "SA62105E_电源树V1.1.pdf": "SA62105E Power Tree V1.1.pdf",
+    "SA62105E_电源树V1.1.pdf": "SA62105E Power Tree v1.1.pdf",
     "V17_PowerTree.pdf": "SA62105X Power Tree V17.pdf",
 }
 
@@ -103,7 +103,7 @@ OVERRIDE_SUBBOARD = {
 CHIP_CN = ["00.基础文档", "硬件相关", "芯片"]
 OVERRIDE_CHIP = {
     "SA62105E_pin_List_ver1.0.8.03.xlsx": "SA62105E_Pin_List_ver1.0.8.03.xlsx",
-    "SA62105X_Pin定义_V1.2.xlsx": "SA62105X_Pin_Definition_V1.2.xlsx",
+    "SA62105X_Pin定义_V1.2.xlsx": "SA62105X_Pin_Definition_v1.2.xlsx",
     "SA62105X芯片简介v1.2.pdf": "SA62105X Chip Overview v1.2.pdf",
     "SA62105系列_数据手册V0.32.pdf": "SA62105 Series Datasheet V0.32.pdf",
     "研极SA62105E硬件用户指南V0.61.pdf": "Yanji SA62105E Hardware User Guide V0.61.pdf",
@@ -349,7 +349,7 @@ def main():
                 eng_parts = [translate_component(p) for p in parts[:-1]] + [OVERRIDE_CHIP[orig_name]]
         # Normalize uppercase 'V' used as version marker only when dotted (e.g., V1.2 -> v1.2, but keep V17)
         if eng_parts:
-            eng_parts[-1] = re.sub(r"\bV(?=\d+\.)", "v", eng_parts[-1])
+            eng_parts[-1] = re.sub(r"(?<![A-Za-z0-9])V(?=\d+\.)", "v", eng_parts[-1])
 
         eng_rel = os.path.join(args.prefix, *eng_parts)
         eng_path = os.path.join(dest_base, eng_rel)
