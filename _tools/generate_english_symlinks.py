@@ -18,6 +18,18 @@ KNOWN_EXTS = {
 }
 
 PHRASE_MAP = [
+    # Prefer longer/specific phrases first
+    ("环境搭建指引", "Environment Setup Guide"),
+    ("环境搭建", "Environment Setup"),
+    ("网络功能", "network function"),
+    # Common words/terms
+    ("编译", "Compilation"),
+    ("环境", "Environment"),
+    ("搭建", "Setup"),
+    ("指引", "Guide"),
+    ("功能", "function"),
+    ("的", " "),
+    # Existing mappings
     ("开箱上手指南", "Getting Started"),
     ("快速启动优化指南", "Quick Start Optimization Guide"),
     ("快速启动", "Quick Start"),
@@ -148,6 +160,15 @@ def translate_component(name: str) -> str:
     s = re.sub(r'([a-z])([A-Z])', r'\1 \2', s)
     # 3) Insert space between digit and letter (e.g., SA62105Series -> SA62105 Series)
     s = re.sub(r'(\d)([A-Za-z])', r'\1 \2', s)
+    # 4) Insert space before version tokens like v1.2 or V1.2
+    s = re.sub(r'(?i)(?<=\w)(v)(\d)', r' \1\2', s)
+
+    # Token normalization for common English words/abbreviations
+    s = re.sub(r'\busb\b', 'USB', s, flags=re.IGNORECASE)
+    s = re.sub(r'\bsample\b', 'Sample', s, flags=re.IGNORECASE)
+    # Prefer "USB host" styling
+    s = re.sub(r'\bUSB\s+[Hh]ost\b', 'USB host', s)
+
     # Collapse and normalize spaces
     s = re.sub(r'[\s]+', ' ', s).strip()
     s = s.replace('_', ' ')
