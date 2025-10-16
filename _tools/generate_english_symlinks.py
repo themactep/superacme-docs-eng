@@ -141,8 +141,8 @@ def translate_component(name: str) -> str:
 def collect_files(base: str) -> List[str]:
     files: List[str] = []
     for root, dirs, fs in os.walk(base):
-        if os.path.basename(root) == '.git':
-            continue
+        # Prune version-control and virtualenv/cache directories
+        dirs[:] = [d for d in dirs if d not in ('.git', '.svn', '.hg', '.venv', '__pycache__')]
         for f in fs:
             files.append(os.path.join(root, f))
     return files
