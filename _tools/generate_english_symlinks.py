@@ -8,6 +8,15 @@ try:
 except Exception:
     lazy_pinyin = None
 
+# Only treat these as true file extensions; otherwise, keep the dot as part of the name
+KNOWN_EXTS = {
+    'pdf','doc','docx','ppt','pptx','xls','xlsx','xlsm','txt','md','csv','json','yaml','yml',
+    'zip','rar','7z','gz','bz2','xz','tar','tgz','tbz2',
+    'deb','rpm','bin','exe','dll','so','a','o',
+    'png','jpg','jpeg','gif','bmp','tiff','svg',
+    'dsn','brd'
+}
+
 PHRASE_MAP = [
     ("开箱上手指南", "Getting Started"),
     ("快速启动优化指南", "Quick Start Optimization Guide"),
@@ -113,6 +122,9 @@ PHRASE_PATTERNS = [(re.compile(re.escape(k)), v) for k, v in PHRASE_MAP]
 
 def translate_component(name: str) -> str:
     stem, ext = os.path.splitext(name)
+    # If the extension is not a known file extension (e.g., '00.基础文档'), treat the dot as part of the name
+    if ext and ext[1:].lower() not in KNOWN_EXTS:
+        stem, ext = name, ''
     s = stem
     for k, v in PUNCT_MAP.items():
         s = s.replace(k, v)
