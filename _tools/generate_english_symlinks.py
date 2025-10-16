@@ -347,6 +347,10 @@ def main():
             orig_name = parts[-1]
             if orig_name in OVERRIDE_CHIP:
                 eng_parts = [translate_component(p) for p in parts[:-1]] + [OVERRIDE_CHIP[orig_name]]
+        # Normalize uppercase 'V' used as version marker only when dotted (e.g., V1.2 -> v1.2, but keep V17)
+        if eng_parts:
+            eng_parts[-1] = re.sub(r"\bV(?=\d+\.)", "v", eng_parts[-1])
+
         eng_rel = os.path.join(args.prefix, *eng_parts)
         eng_path = os.path.join(dest_base, eng_rel)
         parent = os.path.dirname(eng_path)
