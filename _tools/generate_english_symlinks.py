@@ -114,6 +114,9 @@ PHRASE_MAP = [
     ("配套芯片资料", "Supporting Chip Documentation"),
     ("软件相关", "Software"),
     ("硬件相关", "Hardware"),
+    ("硬件参考设计", "Hardware Reference Design"),
+    ("参考设计", "Reference Design"),
+    ("设计", "Design"),
     ("工具链", "Toolchain"),
     ("工具", "Tools"),
     ("配置类", "Configurations"),
@@ -233,14 +236,19 @@ def translate_component(name: str) -> str:
     s = re.sub(r'(?i)sample', 'Sample', s)
 
     # Whitespace and visual separation improvements for Western readability
-    # 1) Insert space between lowerCase and UpperCase (e.g., EnableUSB -> Enable USB)
+    # 1) Insert space between a letter and a CapitalizedWord (e.g., EHardware -> E Hardware)
+    s = re.sub(r'([A-Za-z])([A-Z][a-z])', r'\1 \2', s)
+    # 2) Insert space between lowerCase and any UpperCase (e.g., EnableUSB -> Enable USB)
     s = re.sub(r'([a-z])([A-Z])', r'\1 \2', s)
-    # 2) Insert space between ALLCAPS and next word (e.g., USBTest -> USB Test, USBhost -> USB host)
-    s = re.sub(r'([A-Z]{2,})([A-Z]?[a-z])', r'\1 \2', s)
-    # 3) Insert space between digit and letter (e.g., SA62105Series -> SA62105 Series)
+    # 3) Insert space between ALLCAPS and lowercase start (e.g., USBhost -> USB host)
+    s = re.sub(r'([A-Z]{2,})([a-z])', r'\1 \2', s)
+    # 4) Insert space between digit and letter (e.g., SA62105Series -> SA62105 Series)
     s = re.sub(r'(\d)([A-Za-z])', r'\1 \2', s)
     # 4) Insert space before version tokens like v1.2 or V1.2
     s = re.sub(r'(?i)(?<=\w)(v)(\d)', r' \1\2', s)
+
+    # Collapse spaces in chip model tokens like SA62105E / SA62105X / SA62105X2
+    s = re.sub(r'\b(SA\d{4,6})\s+([A-Z]\d?)\b', r'\1\2', s)
 
     # Prefer "USB host" styling
     s = re.sub(r'\bUSB\s+[Hh]ost\b', 'USB host', s)
