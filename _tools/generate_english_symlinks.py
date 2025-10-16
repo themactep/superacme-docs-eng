@@ -33,6 +33,38 @@ OVERRIDE_FILES = {
     "使能usb host的网络功能.pdf": "Enabling the USB Host Network Function.pdf",
 }
 
+# 00.Basic Documentation/Software/SDK overrides
+SDK_CN = ["00.基础文档", "软件相关", "SDK"]
+OVERRIDE_SDK = {
+    "SA62系列 3A 软件开发参考v0.93.pdf": "SA62 Series 3A Software Development Reference v0.93.pdf",
+    "SA62系列 AUDIO HAPI 软件开发参考_V0.9.pdf": "SA62 Series AUDIO HAPI Software Development Reference v0.9.pdf",
+    "SA62系列 AUDIO 软件开发参考v2.5.3.pdf": "SA62 Series AUDIO Software Development Reference v2.5.3.pdf",
+    "SA62系列 CRYPTO 密码算法库软件开发参考_V0.56.pdf": "SA62 Series CRYPTO Cryptographic Algorithm Library Software Development Reference v0.56.pdf",
+    "SA62系列 FILTER 媒体处理软件开发参考_V0.6.pdf": "SA62 Series Filter Media Processing Software Development Reference v0.6.pdf",
+    "SA62系列 ISP 软件开发参考v0.82.pdf": "SA62 Series ISP Software Development Reference v0.82.pdf",
+    "SA62系列 MAPI整体函数列表.XLSX": "SA62 Series MAPI Function List.XLSX",
+    "SA62系列 MEDIA HAPI 软件开发参考_V0.14.pdf": "SA62 Series MEDIA HAPI Software Development Reference v0.14.pdf",
+    "SA62系列 MIPI使用指南_V0.6.pdf": "SA62 Series MIPI User Guide v0.6.pdf",
+    "SA62系列 REGION 软件开发参考_V0.5.16.pdf": "SA62 Series REGION Software Development Reference v0.5.16.pdf",
+    "SA62系列 SDK 整体说明v0.6.pdf": "SA62 Series SDK Overview v0.6.pdf",
+    "SA62系列 Sensor添加与调试指南v0.81.pdf": "SA62 Series Sensor Adding and Debugging Guide v0.81.pdf",
+    "SA62系列 Sensor调试注意事项.pdf": "SA62 Series Sensor Debugging Precautions.pdf",
+    "SA62系列 SENSOR 软件开发参考_V0.55.pdf": "SA62 Series Sensor Software Development Reference V0.55.pdf",
+    "SA62系列 SVP 软件开发参考_V0.5.9.pdf": "SA62 Series SVP Software Development Reference V0.5.9.pdf",
+    "SA62系列 SYS HAPI 软件开发参考_V0.5.pdf": "SA62 Series SYS HAPI Software Development Reference V0.5.pdf",
+    "SA62系列 SYS_软件开发参考_V0.5.19.pdf": "SA62 Series SYS Software Development Reference V0.5.19.pdf",
+    "SA62系列_VIDEO_HAPI_软件开发参考_V3.0.pdf": "SA62 Series VIDEO HAPI Software Development Reference V3.0.pdf",
+    "SA62系列 VIN 软件开发参考_V0.63.pdf": "SA62 Series VIN Software Development Reference V0.63.pdf",
+    "SA62系列 VPSS 软件开发参考_V0.62.pdf": "SA62 Series VPSS Software Development Reference V0.62.pdf",
+    "SA62系列 VPU 编码软件开发参考_V0.8.1.pdf": "SA62 Series VPU Encoding Software Development Reference V0.8.1.pdf",
+    "SA62系列 VPU 解码软件开发参考0.5.3.pdf": "SA62 Series VPU Decoding Software Development Reference V0.5.3.pdf",
+    "SA62系列 低功耗模式开发指南_v1.0.0.pdf": "SA62 Series Low Power Mode Development Guide v1.0.0.pdf",
+    "SA62系列_双Sensor_mipi_switch方案调试注意事项.pdf": "SA62 Series Dual Sensor MIPI Switch Solution Debugging Notes.pdf",
+    "SA62系列 快速启动优化指南_v1.8.0.pdf": "SA62 Series Quick Start Optimization Guide v1.8.0.pdf",
+    "SA62系列音频算法参数调试指南_V0.2.pdf": "SA62 Series Audio Algorithm Parameter Debugging Guide v0.2.pdf",
+    "SA62系列 音频设备树配置说明_v0.3.pdf": "SA62 Series Audio Device Tree Configuration Instructions v0.3.pdf",
+}
+
 PHRASE_MAP = [
     # Prefer longer/specific phrases first
     ("环境搭建指引", "Environment Setup Guide"),
@@ -234,6 +266,11 @@ def main():
             orig_name = parts[-1]
             if orig_name in OVERRIDE_FILES:
                 eng_parts = [translate_component(p) for p in parts[:-1]] + [OVERRIDE_FILES[orig_name]]
+        # Apply folder-specific overrides for filenames in SDK
+        if len(parts) >= 4 and parts[0:3] == SDK_CN:
+            orig_name = parts[-1]
+            if orig_name in OVERRIDE_SDK:
+                eng_parts = [translate_component(p) for p in parts[:-1]] + [OVERRIDE_SDK[orig_name]]
         eng_rel = os.path.join(args.prefix, *eng_parts)
         eng_path = os.path.join(dest_base, eng_rel)
         parent = os.path.dirname(eng_path)
