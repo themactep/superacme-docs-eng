@@ -88,6 +88,15 @@ OVERRIDE_BSP = {
     "SA62系列 镜像打包工具使用指南.pdf": "SA62 Series Image Packaging Tool User Guide.pdf",
 }
 
+# 00.Basic Documentation/Hardware/Sub-board overrides
+SUBBOARD_CN = ["00.基础文档", "硬件相关", "子板"]
+OVERRIDE_SUBBOARD = {
+    "EVB硬件参考设计_原理图_pcb.rar": "EVB Hardware Reference Design PCB Schematic.rar",
+    "6920E2 V24 DEMO.tar": "6920E2 V24 DEMO.tar",
+    "SA62105E_电源树V1.1.pdf": "SA62105E Power Tree V1.1.pdf",
+
+}
+
 
 
 PHRASE_MAP = [
@@ -249,6 +258,8 @@ def translate_component(name: str) -> str:
 
     # Collapse spaces in chip model tokens like SA62105E / SA62105X / SA62105X2
     s = re.sub(r'\b(SA\d{4,6})\s+([A-Z]\d?)\b', r'\1\2', s)
+    # Collapse spaces for numeric prefix + letter+digits combos (e.g., 6920 E2 -> 6920E2)
+    s = re.sub(r'(\d+)\s+([A-Z]\d+)\b', r'\1\2', s)
 
     # Prefer "USB host" styling
     s = re.sub(r'\bUSB\s+[Hh]ost\b', 'USB host', s)
@@ -314,6 +325,11 @@ def main():
             orig_name = parts[-1]
             if orig_name in OVERRIDE_BSP:
                 eng_parts = [translate_component(p) for p in parts[:-1]] + [OVERRIDE_BSP[orig_name]]
+        # Apply folder-specific overrides for filenames in Hardware/Sub-board
+        if len(parts) >= 4 and parts[0:3] == SUBBOARD_CN:
+            orig_name = parts[-1]
+            if orig_name in OVERRIDE_SUBBOARD:
+                eng_parts = [translate_component(p) for p in parts[:-1]] + [OVERRIDE_SUBBOARD[orig_name]]
         eng_rel = os.path.join(args.prefix, *eng_parts)
         eng_path = os.path.join(dest_base, eng_rel)
         parent = os.path.dirname(eng_path)
