@@ -17,6 +17,22 @@ KNOWN_EXTS = {
     'dsn','brd'
 }
 
+# Folder-specific overrides for exact filenames
+GETTING_STARTED_CN = ["00.基础文档", "软件相关", "开箱上手指南"]
+OVERRIDE_FILES = {
+    # 00.Basic Documentation/Software/Getting Started/
+    "EVB配置网络.pdf": "EVB Network Configuration.pdf",
+    "Linux 编译 sample环境搭建指引v1.1.pdf": "Linux Compilation Sample Environment Setup Guide v1.1.pdf",
+    "SA62105X2 Bring-Up应用指南v0.3.pdf": "SA62105X2 Bring-Up Application Guide v0.3.pdf",
+    "SA62系列AI算法部署指南v1.0.pdf": "SA62 Series AI Algorithm Deployment Guide v1.0.pdf",
+    "SA62系列_NorFlash固件烧录指南v1.5.pdf": "SA62 Series NorFlash Firmware Burning Guide v1.5.pdf",
+    "SA62系列_V13功耗板_AI_Robot使用指南v0.5.pdf": "SA62 Series V13 Power Consumption Board AI Robot User Guide v0.5.pdf",
+    "SA62系列  回板验证操作指南v0.2.pdf": "SA62 Series Board Verification Operation Guide v0.2.pdf",
+    "！SA62系列 开箱上手指南v1.9.pdf": "SA62 Series Unboxing and Getting Started Guide v1.9.pdf",
+    "Ubuntu 22.04 开发环境配置说明文档.pdf": "Ubuntu 22.04 Development Environment Configuration Instructions.pdf",
+    "使能usb host的网络功能.pdf": "Enabling the USB Host Network Function.pdf",
+}
+
 PHRASE_MAP = [
     # Prefer longer/specific phrases first
     ("环境搭建指引", "Environment Setup Guide"),
@@ -211,7 +227,13 @@ def main():
     for full in files:
         rel = os.path.relpath(full, src_base)
         parts = rel.split(os.sep)
+        # Default translation for all components
         eng_parts = [translate_component(p) for p in parts]
+        # Apply folder-specific overrides for filenames in Getting Started
+        if len(parts) >= 4 and parts[0:3] == GETTING_STARTED_CN:
+            orig_name = parts[-1]
+            if orig_name in OVERRIDE_FILES:
+                eng_parts = [translate_component(p) for p in parts[:-1]] + [OVERRIDE_FILES[orig_name]]
         eng_rel = os.path.join(args.prefix, *eng_parts)
         eng_path = os.path.join(dest_base, eng_rel)
         parent = os.path.dirname(eng_path)
