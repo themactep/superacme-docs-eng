@@ -105,7 +105,7 @@ OVERRIDE_CHIP = {
     "SA62105E_pin_List_ver1.0.8.03.xlsx": "SA62105E_Pin_List_ver1.0.8.03.xlsx",
     "SA62105X_Pin定义_V1.2.xlsx": "SA62105X_Pin_Definition_V1.2.xlsx",
     "SA62105X芯片简介v1.2.pdf": "SA62105X Chip Overview v1.2.pdf",
-    "SA62105系列_数据手册V0.32.pdf": "SA62105 Series_Datasheet V0.32.pdf",
+    "SA62105系列_数据手册V0.32.pdf": "SA62105 Series Datasheet V0.32.pdf",
     "研极SA62105E硬件用户指南V0.61.pdf": "Yanji SA62105E Hardware User Guide V0.61.pdf",
     "研极SA62105X硬件用户指南V0.87.pdf": "Yanji SA62105X Hardware User Guide V0.87.pdf",
     "研极SA62105芯片适配指南V0.44.pdf": "Yanji SA62105 Chip Adaptation Guide V0.44.pdf",
