@@ -153,19 +153,20 @@ def translate_component(name: str) -> str:
             s = ''.join(out)
         else:
             s = re_non_ascii.sub('', s)
+    # Token normalization for common English words/abbreviations (run before spacing rules)
+    s = re.sub(r'\busb\b', 'USB', s, flags=re.IGNORECASE)
+    s = re.sub(r'\bsample\b', 'Sample', s, flags=re.IGNORECASE)
+
     # Whitespace and visual separation improvements for Western readability
-    # 1) Insert space between ALLCAPS acronym and CapitalizedWord (e.g., USBTest -> USB Test)
-    s = re.sub(r'([A-Z]+)([A-Z][a-z])', r'\1 \2', s)
-    # 2) Insert space between lowerCase and UpperCase (e.g., DatasheetV0.32 -> Datasheet V0.32)
+    # 1) Insert space between lowerCase and UpperCase (e.g., EnableUSB -> Enable USB)
     s = re.sub(r'([a-z])([A-Z])', r'\1 \2', s)
+    # 2) Insert space between ALLCAPS acronym and CapitalizedWord (e.g., USBTest -> USB Test)
+    s = re.sub(r'([A-Z]+)([A-Z][a-z])', r'\1 \2', s)
     # 3) Insert space between digit and letter (e.g., SA62105Series -> SA62105 Series)
     s = re.sub(r'(\d)([A-Za-z])', r'\1 \2', s)
     # 4) Insert space before version tokens like v1.2 or V1.2
     s = re.sub(r'(?i)(?<=\w)(v)(\d)', r' \1\2', s)
 
-    # Token normalization for common English words/abbreviations
-    s = re.sub(r'\busb\b', 'USB', s, flags=re.IGNORECASE)
-    s = re.sub(r'\bsample\b', 'Sample', s, flags=re.IGNORECASE)
     # Prefer "USB host" styling
     s = re.sub(r'\bUSB\s+[Hh]ost\b', 'USB host', s)
 
