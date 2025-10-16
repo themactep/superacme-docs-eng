@@ -120,6 +120,7 @@ PHRASE_MAP = [
     ("流程", "Process"),
     ("网络", "Network"),
     ("使能", "Enable"),
+    ("指南", "Guide"),
     ("ISP", "ISP"), ("ISPLite", "ISPLite"), ("AIISP", "AIISP"), ("VIN", "VIN"), ("VPSS", "VPSS"), ("VPU", "VPU"), ("HAPI", "HAPI"), ("SVP", "SVP"), ("PMIC", "PMIC"), ("AWB", "AWB"), ("MIPI", "MIPI"), ("NorFlash", "NorFlash"), ("Ubuntu", "Ubuntu")
 ]
 
@@ -154,14 +155,15 @@ def translate_component(name: str) -> str:
         else:
             s = re_non_ascii.sub('', s)
     # Token normalization for common English words/abbreviations (run before spacing rules)
-    s = re.sub(r'\busb\b', 'USB', s, flags=re.IGNORECASE)
-    s = re.sub(r'\bsample\b', 'Sample', s, flags=re.IGNORECASE)
+    # Normalize common tokens regardless of adjacency to non-ASCII
+    s = re.sub(r'(?i)usb', 'USB', s)
+    s = re.sub(r'(?i)sample', 'Sample', s)
 
     # Whitespace and visual separation improvements for Western readability
     # 1) Insert space between lowerCase and UpperCase (e.g., EnableUSB -> Enable USB)
     s = re.sub(r'([a-z])([A-Z])', r'\1 \2', s)
-    # 2) Insert space between ALLCAPS acronym and CapitalizedWord (e.g., USBTest -> USB Test)
-    s = re.sub(r'([A-Z]+)([A-Z][a-z])', r'\1 \2', s)
+    # 2) Insert space between ALLCAPS and next word (e.g., USBTest -> USB Test, USBhost -> USB host)
+    s = re.sub(r'([A-Z]{2,})([A-Z]?[a-z])', r'\1 \2', s)
     # 3) Insert space between digit and letter (e.g., SA62105Series -> SA62105 Series)
     s = re.sub(r'(\d)([A-Za-z])', r'\1 \2', s)
     # 4) Insert space before version tokens like v1.2 or V1.2
