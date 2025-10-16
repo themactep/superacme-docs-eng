@@ -141,6 +141,14 @@ def translate_component(name: str) -> str:
             s = ''.join(out)
         else:
             s = re_non_ascii.sub('', s)
+    # Whitespace and visual separation improvements for Western readability
+    # 1) Insert space between ALLCAPS acronym and CapitalizedWord (e.g., USBTest -> USB Test)
+    s = re.sub(r'([A-Z]+)([A-Z][a-z])', r'\1 \2', s)
+    # 2) Insert space between lowerCase and UpperCase (e.g., DatasheetV0.32 -> Datasheet V0.32)
+    s = re.sub(r'([a-z])([A-Z])', r'\1 \2', s)
+    # 3) Insert space between digit and letter (e.g., SA62105Series -> SA62105 Series)
+    s = re.sub(r'(\d)([A-Za-z])', r'\1 \2', s)
+    # Collapse and normalize spaces
     s = re.sub(r'[\s]+', ' ', s).strip()
     s = s.replace('_', ' ')
     s = re.sub(r'\s+', ' ', s)
